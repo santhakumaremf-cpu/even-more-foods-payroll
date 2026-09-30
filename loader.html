@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Even More Foods Payroll - Loading...</title>
+</head>
+<body style="font-family:system-ui;padding:2rem;text-align:center">
+<h2>Loading Payroll System...</h2>
+<p id="st">Fetching data...</p>
+<script>
+async function load() {
+  const parts = [];
+  parts.push(await (await fetch("chunk0.txt")).text());
+  parts.push(await (await fetch("chunk1.txt")).text());
+  parts.push(await (await fetch("chunk2.txt")).text());
+  parts.push(await (await fetch("chunk3.txt")).text());
+  const b64 = parts.join("");
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  const html = new TextDecoder().decode(bytes);
+  document.open();
+  document.write(html);
+  document.close();
+}
+load().catch(e => { document.getElementById("st").textContent = "Error: " + e.message + " — open via GitHub Pages or local server"; });
+</script>
+</body>
+</html>
