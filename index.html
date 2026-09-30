@@ -1,11 +1,313 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ta">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="0; url=payroll-complete.html">
-<title>Even More Foods Payroll</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Even More Foods - Payroll System</title>
+<script src="employees.js"></script>
+<style>
+:root{--p:#1a365d;--pl:#2c5282;--a:#ed8936;--s:#38a169;--d:#e53e3e;--bg:#f0f4f8;--c:#fff;--t:#1a202c;--m:#718096;--b:#e2e8f0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--t);line-height:1.5}
+header{background:linear-gradient(135deg,#1a365d,#2b6cb0);color:#fff;padding:1rem 1.25rem}
+header h1{font-size:1.25rem}header p{opacity:.85;font-size:.85rem}
+nav{background:#fff;border-bottom:1px solid var(--b);display:flex;overflow-x:auto;position:sticky;top:0;z-index:10}
+nav button{background:none;border:none;padding:.75rem 1rem;cursor:pointer;font-size:.85rem;color:var(--m);border-bottom:3px solid transparent;white-space:nowrap}
+nav button:hover{color:var(--p)}nav button.active{color:var(--p);border-bottom-color:var(--a);font-weight:600}
+main{max-width:1100px;margin:0 auto;padding:1rem}
+.tab{display:none}.tab.active{display:block}
+.card{background:var(--c);border-radius:10px;padding:1.15rem;margin-bottom:1rem;border:1px solid var(--b);box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.card h2{font-size:1.1rem;color:var(--p);margin-bottom:.75rem;border-bottom:2px solid var(--a);display:inline-block;padding-bottom:.3rem}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}@media(max-width:700px){.g2{grid-template-columns:1fr}}
+label{display:block;font-size:.8rem;font-weight:600;color:var(--m);margin-bottom:.2rem}
+input,select{width:100%;padding:.5rem .65rem;border:1px solid var(--b);border-radius:6px;font-size:.9rem;margin-bottom:.7rem}
+.btn{background:var(--p);color:#fff;border:none;padding:.55rem 1.1rem;border-radius:6px;font-weight:600;cursor:pointer;font-size:.88rem}
+.btn:hover{background:var(--pl)}.btn-a{background:var(--a)}.btn-o{background:#fff;color:var(--p);border:2px solid var(--p)}
+.rb{background:linear-gradient(135deg,#ebf8ff,#e6fffa);border:1px solid #90cdf4;border-radius:8px;padding:.9rem;margin-top:.8rem}
+.rr{display:flex;justify-content:space-between;padding:.3rem 0;border-bottom:1px dashed #bee3f8}
+.rr:last-child{border:none;font-size:1.05rem;font-weight:700;color:var(--p)}
+.rl{color:var(--m)}.rv{font-weight:600}.neg{color:var(--d)}.pos{color:var(--s)}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th,td{padding:.45rem .55rem;border-bottom:1px solid var(--b);text-align:left}
+th{background:#edf2f7;color:var(--p);position:sticky;top:0}
+.num{text-align:right}.badge{padding:.1rem .4rem;border-radius:999px;font-size:.7rem;font-weight:600}
+.by{background:#c6f6d5;color:#22543d}.bn{background:#fed7d7;color:#742a2a}
+.tw{overflow:auto;max-height:380px}
+.ag{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:5px}
+.ad{background:#edf2f7;border-radius:5px;padding:4px;text-align:center}
+.ad label{font-size:.65rem}.ad input{padding:2px;font-size:.8rem;text-align:center;margin:0}
+.ps{border:2px solid #1a365d;border-radius:8px;padding:1.25rem;max-width:640px;margin:1rem auto;font-size:.88rem;background:#fff}
+.ph{text-align:center;border-bottom:2px solid #1a365d;padding-bottom:.6rem;margin-bottom:.8rem}
+.pm{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:.8rem;font-size:.84rem}
+.fb{background:#1a202c;color:#e2e8f0;padding:.75rem;border-radius:6px;font-family:monospace;font-size:.78rem;margin:.5rem 0;overflow-x:auto}
+.ai{background:#ebf8ff;border-left:4px solid #3182ce;padding:.7rem;border-radius:6px;margin:.6rem 0;font-size:.86rem;color:#2c5282}
+@media print{nav,header,.np{display:none!important}.tab{display:none!important}#payslip{display:block!important}}
+footer{text-align:center;padding:1rem;color:var(--m);font-size:.78rem;margin-top:1rem}
+</style>
 </head>
 <body>
-<p>Redirecting to <a href="payroll-complete.html">Payroll System</a>...</p>
+<header>
+<div style="font-size:.75rem;opacity:.7">Even More Foods Private Limited · Namagiripet, Rasipuram</div>
+<h1>Payroll & Attendance System</h1>
+<p>July 2026 · Calculator · Attendance · Payslip · PF/ESI</p>
+</header>
+<nav>
+<button class="active" onclick="showTab('calc',this)">Calculator</button>
+<button onclick="showTab('attn',this)">Attendance</button>
+<button onclick="showTab('master',this)">Master</button>
+<button onclick="showTab('payslip',this)">Payslip</button>
+<button onclick="showTab('pfesi',this)">PF/ESI</button>
+<button onclick="showTab('docs',this)">Formulas</button>
+</nav>
+<main>
+
+<div id="calc" class="tab active">
+<div class="card">
+<h2>Salary Calculator</h2>
+<div class="g2">
+<div>
+<label>Select Employee</label>
+<select id="cEmp" onchange="pickEmp()"></select>
+<label>Name</label><input id="cName" value="Sample">
+<label>Monthly Gross (₹)</label><input type="number" id="cGross" value="17000">
+<label>Month Days</label><input type="number" id="cDays" value="30">
+<label>Sundays</label><input type="number" id="cSun" value="4">
+<label>LOP Days</label><input type="number" id="cLop" value="0" step="0.5">
+<label>Paid Days</label><input type="number" id="cPaid" value="30" step="0.5">
+</div>
+<div>
+<label>OT Hours</label><input type="number" id="cOt" value="0" step="0.5">
+<label>Night Shifts</label><input type="number" id="cNight" value="0">
+<label>EPF</label><select id="cEpf"><option value="Y">Yes</option><option value="N">No</option></select>
+<label>ESI</label><select id="cEsi"><option value="Y">Yes</option><option value="N">No</option></select>
+<label>Structure</label><select id="cStruct"><option value="basic">Full as Basic</option><option value="split">50% Basic + 20% HRA + 30% SPL</option></select>
+<label>Advance (₹)</label><input type="number" id="cAdv" value="0">
+<label>Food (₹)</label><input type="number" id="cFood" value="0">
+<label>Reimbursement (₹)</label><input type="number" id="cReimb" value="0">
+</div>
+</div>
+<button class="btn btn-a" onclick="calcSal()">Calculate Net Salary</button>
+<div id="salRes" class="rb" style="display:none">
+<div class="rr"><span class="rl">Gross</span><span class="rv" id="rG"></span></div>
+<div class="rr"><span class="rl">LOP Deduction</span><span class="rv neg" id="rL"></span></div>
+<div class="rr"><span class="rl">Basic</span><span class="rv" id="rB"></span></div>
+<div class="rr"><span class="rl">HRA</span><span class="rv" id="rH"></span></div>
+<div class="rr"><span class="rl">SPL</span><span class="rv" id="rS"></span></div>
+<div class="rr"><span class="rl">OT + Night</span><span class="rv" id="rO"></span></div>
+<div class="rr"><span class="rl"><b>Total Earnings</b></span><span class="rv pos" id="rT"></span></div>
+<div class="rr"><span class="rl">PF</span><span class="rv neg" id="rP"></span></div>
+<div class="rr"><span class="rl">ESI</span><span class="rv neg" id="rE"></span></div>
+<div class="rr"><span class="rl">Other Deductions</span><span class="rv neg" id="rD"></span></div>
+<div class="rr"><span class="rl">NET SALARY</span><span class="rv" id="rNet"></span></div>
+</div>
+</div>
+</div>
+
+<div id="attn" class="tab">
+<div class="card">
+<h2>Attendance Entry — July 2026</h2>
+<label>Employee</label><select id="aEmp"></select>
+<div class="ag" id="aGrid" style="margin:1rem 0"></div>
+<button class="btn btn-a" onclick="calcAttn()">Calculate Days</button>
+<button class="btn btn-o" onclick="fillAttn(9)" style="margin-left:6px">Fill 9hrs</button>
+<button class="btn btn-o" onclick="fillAttn(0)" style="margin-left:6px">Clear</button>
+<button class="btn" onclick="sendAttn()" style="margin-left:6px">→ Calculator</button>
+<div id="aRes" class="rb" style="display:none;margin-top:1rem">
+<div class="rr"><span class="rl">Total Hours</span><span class="rv" id="arH"></span></div>
+<div class="rr"><span class="rl">Present (≥7.5)</span><span class="rv" id="arP"></span></div>
+<div class="rr"><span class="rl">LOP (0 hrs)</span><span class="rv" id="arL"></span></div>
+<div class="rr"><span class="rl">Half Days</span><span class="rv" id="arF"></span></div>
+<div class="rr"><span class="rl">Paid Days</span><span class="rv" id="arD"></span></div>
+</div>
+</div>
+</div>
+
+<div id="master" class="tab">
+<div class="card">
+<h2>Employee Master</h2>
+<input id="mQ" placeholder="Search..." oninput="renderMaster()" style="max-width:260px;margin-bottom:1rem">
+<div class="tw"><table><thead><tr><th>ID</th><th>Name</th><th class="num">Wage</th><th>EPF</th><th>ESI</th><th></th></tr></thead><tbody id="mBody"></tbody></table></div>
+</div>
+</div>
+
+<div id="payslip" class="tab">
+<div class="card np">
+<h2>Payslip Generator</h2>
+<div class="g2">
+<div>
+<label>Employee</label><select id="pEmp"></select>
+<label>Month</label><input id="pMonth" value="July 2026">
+<label>LOP</label><input type="number" id="pLop" value="0" step="0.5">
+<label>OT Hours</label><input type="number" id="pOt" value="0">
+</div>
+<div>
+<label>Night Shifts</label><input type="number" id="pNight" value="0">
+<label>Advance</label><input type="number" id="pAdv" value="0">
+<label>Food</label><input type="number" id="pFood" value="0">
+<label>Structure</label><select id="pStruct"><option value="basic">Full as Basic</option><option value="split">50/20/30</option></select>
+<button class="btn btn-a" onclick="genPS()">Generate</button>
+<button class="btn btn-o" onclick="window.print()" style="margin-left:6px">Print / PDF</button>
+</div>
+</div>
+</div>
+<div id="psOut"></div>
+</div>
+
+<div id="pfesi" class="tab">
+<div class="card">
+<h2>PF & ESI Calculator</h2>
+<div class="g2">
+<div>
+<label>Basic (₹)</label><input type="number" id="pfB" value="15000">
+<label>Gross (₹)</label><input type="number" id="pfG" value="30000">
+<label>EPF</label><select id="pfE"><option value="Y">Yes</option><option value="N">No</option></select>
+<label>ESI</label><select id="pfI"><option value="Y">Yes</option><option value="N">No</option></select>
+<label>Paid Days</label><input type="number" id="pfP" value="26">
+<label>Sundays</label><input type="number" id="pfS" value="4">
+<button class="btn" onclick="calcPF()">Calculate</button>
+</div>
+<div id="pfR" class="rb" style="display:none">
+<div class="rr"><span class="rl">EPF Wages</span><span class="rv" id="pfW"></span></div>
+<div class="rr"><span class="rl">Employee PF 12%</span><span class="rv neg" id="pfEm"></span></div>
+<div class="rr"><span class="rl">ESI 0.75%</span><span class="rv neg" id="pfEs"></span></div>
+<div class="rr"><span class="rl">Daily Avg</span><span class="rv" id="pfDa"></span></div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="docs" class="tab">
+<div class="card">
+<h2>Key Formulas (from Excel)</h2>
+<div class="fb">Working Days = 30 − 4 Sundays − 0 NH = 26</div>
+<div class="fb">PF: IF EPF=Y → IF Basic&gt;15000 THEN ₹1800 ELSE ROUNDUP(Basic×12%)</div>
+<div class="fb">ESI: IF ESI=Y AND (Basic/(Paid−Sundays))&gt;176 AND Basic≤21000 → ROUNDUP(Basic×0.75%)</div>
+<div class="fb">OT = ROUND((Gross/30/8)×Hours, 0)</div>
+<div class="fb">Night Incentive = Shifts × ₹40</div>
+<div class="fb">Net = Total − PF − ESI − Food − Advance − Reimbursement</div>
+<div class="ai">High wage split: Basic 50% · HRA 20% · SPL 30%. Other workers: full amount as Basic after LOP.</div>
+</div>
+</div>
+
+</main>
+<footer>Even More Foods Pvt Ltd · Payroll System · July 2026</footer>
+<script>
+if(typeof employees==='undefined'){var employees=[];}
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');if(btn)btn.classList.add('active');}
+function fmt(n){return '₹'+Math.round(n).toLocaleString('en-IN');}
+function roundUp(n){return Math.ceil(n-1e-9);}
+function fillSelects(){
+  const opts=employees.map(e=>`<option value="${e.id}">${e.id} — ${e.name}</option>`).join('');
+  ['cEmp','aEmp','pEmp'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=opts||'<option>No data</option>';});
+}
+function pickEmp(){
+  const e=employees.find(x=>x.id==document.getElementById('cEmp').value);if(!e)return;
+  document.getElementById('cName').value=e.name;
+  document.getElementById('cGross').value=e.wage;
+  document.getElementById('cEpf').value=e.epf||'N';
+  document.getElementById('cEsi').value=e.esi||'N';
+  document.getElementById('cStruct').value=(e.wage>=25000)?'split':'basic';
+}
+function calcSal(){
+  const gross=+document.getElementById('cGross').value||0,days=+document.getElementById('cDays').value||30;
+  const sun=+document.getElementById('cSun').value||0,lop=+document.getElementById('cLop').value||0;
+  let paid=+document.getElementById('cPaid').value;if(isNaN(paid))paid=days-lop;
+  const ot=+document.getElementById('cOt').value||0,night=+document.getElementById('cNight').value||0;
+  const epf=document.getElementById('cEpf').value,esi=document.getElementById('cEsi').value;
+  const struct=document.getElementById('cStruct').value;
+  const adv=+document.getElementById('cAdv').value||0,food=+document.getElementById('cFood').value||0,reimb=+document.getElementById('cReimb').value||0;
+  const lopAmt=Math.round((gross/days)*lop),adj=gross-lopAmt;
+  let basic,hra,spl;
+  if(struct==='split'){basic=Math.round(adj*.5);hra=Math.round(adj*.2);spl=adj-basic-hra;}
+  else{basic=adj;hra=0;spl=0;}
+  const otAmt=ot>0?Math.round((gross/days/8)*ot):0,nightAmt=night*40,total=basic+hra+spl+otAmt+nightAmt;
+  let pf=0;if(epf==='Y')pf=basic>15000?Math.round(15000*.12):roundUp(basic*.12);
+  let esiA=0;const daily=(paid-sun)>0?basic/(paid-sun):0;
+  if(esi==='Y'&&daily>176&&basic<=21000)esiA=roundUp(basic*.0075);
+  const net=Math.round(total-pf-esiA-food-adv-reimb);
+  document.getElementById('rG').textContent=fmt(gross);
+  document.getElementById('rL').textContent='-'+fmt(lopAmt);
+  document.getElementById('rB').textContent=fmt(basic);
+  document.getElementById('rH').textContent=fmt(hra);
+  document.getElementById('rS').textContent=fmt(spl);
+  document.getElementById('rO').textContent=fmt(otAmt+nightAmt);
+  document.getElementById('rT').textContent=fmt(total);
+  document.getElementById('rP').textContent='-'+fmt(pf);
+  document.getElementById('rE').textContent='-'+fmt(esiA);
+  document.getElementById('rD').textContent='-'+fmt(adv+food+reimb);
+  document.getElementById('rNet').textContent=fmt(net);
+  document.getElementById('salRes').style.display='block';
+}
+function initAttn(){
+  let h='';for(let d=1;d<=31;d++){const v=[5,12,19,26].includes(d)?0:9;
+  h+=`<div class="ad"><label>D${d}</label><input type="number" id="ad${d}" value="${v}" min="0" max="12" step="0.5"></div>`;}
+  document.getElementById('aGrid').innerHTML=h;
+}
+function fillAttn(v){for(let d=1;d<=31;d++){const el=document.getElementById('ad'+d);if(el)el.value=v;}}
+function calcAttn(){
+  let t=0,p=0,l=0,f=0;for(let d=1;d<=31;d++){const h=+document.getElementById('ad'+d).value||0;t+=h;if(h>=7.5)p++;else if(h===0)l++;else f++;}
+  const paid=p+f*.5;document.getElementById('arH').textContent=t.toFixed(1);
+  document.getElementById('arP').textContent=p;document.getElementById('arL').textContent=l;
+  document.getElementById('arF').textContent=f;document.getElementById('arD').textContent=paid.toFixed(1);
+  document.getElementById('aRes').style.display='block';window._attn={l,paid};
+}
+function sendAttn(){
+  calcAttn();const e=employees.find(x=>x.id==document.getElementById('aEmp').value);
+  if(e){document.getElementById('cEmp').value=e.id;pickEmp();}
+  if(window._attn){document.getElementById('cLop').value=window._attn.l;document.getElementById('cPaid').value=window._attn.paid;}
+  showTab('calc',document.querySelectorAll('nav button')[0]);calcSal();
+}
+function renderMaster(){
+  const q=(document.getElementById('mQ').value||'').toLowerCase();
+  const list=employees.filter(e=>!q||String(e.name).toLowerCase().includes(q)||String(e.id).includes(q));
+  document.getElementById('mBody').innerHTML=list.map(e=>`<tr><td>${e.id}</td><td>${e.name}</td><td class="num">${fmt(e.wage)}</td>
+  <td><span class="badge ${e.epf==='Y'?'by':'bn'}">${e.epf||'N'}</span></td>
+  <td><span class="badge ${e.esi==='Y'?'by':'bn'}">${e.esi||'N'}</span></td>
+  <td><button class="btn" style="padding:.25rem .5rem;font-size:.75rem" onclick="useM(${JSON.stringify(e.id)})">Use</button></td></tr>`).join('');
+}
+function useM(id){document.getElementById('cEmp').value=id;pickEmp();showTab('calc',document.querySelectorAll('nav button')[0]);calcSal();}
+function genPS(){
+  const e=employees.find(x=>x.id==document.getElementById('pEmp').value);if(!e)return;
+  const month=document.getElementById('pMonth').value,lop=+document.getElementById('pLop').value||0;
+  const ot=+document.getElementById('pOt').value||0,night=+document.getElementById('pNight').value||0;
+  const adv=+document.getElementById('pAdv').value||0,food=+document.getElementById('pFood').value||0;
+  const struct=document.getElementById('pStruct').value,days=30,gross=e.wage;
+  const lopAmt=Math.round((gross/days)*lop),adj=gross-lopAmt;
+  let basic,hra,spl;if(struct==='split'){basic=Math.round(adj*.5);hra=Math.round(adj*.2);spl=adj-basic-hra;}else{basic=adj;hra=0;spl=0;}
+  const otAmt=ot>0?Math.round((gross/days/8)*ot):0,nightAmt=night*40,total=basic+hra+spl+otAmt+nightAmt;
+  let pf=0;if(e.epf==='Y')pf=basic>15000?Math.round(15000*.12):roundUp(basic*.12);
+  let esiA=0;const paid=days-lop,daily=(paid-4)>0?basic/(paid-4):0;
+  if(e.esi==='Y'&&daily>176&&basic<=21000)esiA=roundUp(basic*.0075);
+  const net=Math.round(total-pf-esiA-food-adv);
+  document.getElementById('psOut').innerHTML=`<div class="ps"><div class="ph"><h2 style="color:#1a365d;margin:0">Even More Foods Private Limited</h2>
+  <p style="font-size:.8rem;color:#666">Namagiripet, Rasipuram</p><p style="font-weight:600">PAYSLIP — ${month}</p></div>
+  <div class="pm"><div><b>ID:</b> ${e.id}</div><div><b>Name:</b> ${e.name}</div>
+  <div><b>EPF:</b> ${e.epf}</div><div><b>ESI:</b> ${e.esi}</div>
+  <div><b>LOP:</b> ${lop}</div><div><b>Paid Days:</b> ${paid}</div></div>
+  <table style="width:100%;font-size:.85rem"><tr style="background:#e2e8f0"><th>Earnings</th><th style="text-align:right">₹</th><th>Deductions</th><th style="text-align:right">₹</th></tr>
+  <tr><td>Basic</td><td style="text-align:right">${basic.toLocaleString('en-IN')}</td><td>PF</td><td style="text-align:right">${pf.toLocaleString('en-IN')}</td></tr>
+  <tr><td>HRA</td><td style="text-align:right">${hra.toLocaleString('en-IN')}</td><td>ESI</td><td style="text-align:right">${esiA.toLocaleString('en-IN')}</td></tr>
+  <tr><td>SPL</td><td style="text-align:right">${spl.toLocaleString('en-IN')}</td><td>Advance</td><td style="text-align:right">${adv.toLocaleString('en-IN')}</td></tr>
+  <tr><td>OT + Night</td><td style="text-align:right">${(otAmt+nightAmt).toLocaleString('en-IN')}</td><td>Food</td><td style="text-align:right">${food.toLocaleString('en-IN')}</td></tr>
+  <tr style="font-weight:700;background:#ebf8ff"><td>Total</td><td style="text-align:right">${total.toLocaleString('en-IN')}</td><td>Total Ded</td><td style="text-align:right">${(pf+esiA+adv+food).toLocaleString('en-IN')}</td></tr></table>
+  <div style="text-align:right;font-size:1.15rem;font-weight:700;color:#1a365d;margin-top:.8rem">NET: ₹ ${net.toLocaleString('en-IN')}</div>
+  <p style="text-align:center;font-size:.72rem;color:#888;margin-top:.8rem;border-top:1px dashed #ccc;padding-top:.4rem">Computer-generated · Even More Foods · ${month}</p></div>`;
+}
+function calcPF(){
+  const basic=+document.getElementById('pfB').value||0,gross=+document.getElementById('pfG').value||0;
+  const epf=document.getElementById('pfE').value,esi=document.getElementById('pfI').value;
+  const paid=+document.getElementById('pfP').value||26,sun=+document.getElementById('pfS').value||4;
+  const epfW=Math.min(basic,15000);let empPf=0;
+  if(epf==='Y')empPf=basic>15000?Math.round(15000*.12):roundUp(basic*.12);
+  let esiA=0;const daily=(paid-sun)>0?basic/(paid-sun):0;
+  if(esi==='Y'&&daily>176&&basic<=21000)esiA=roundUp(basic*.0075);
+  document.getElementById('pfW').textContent=fmt(epfW);
+  document.getElementById('pfEm').textContent=fmt(empPf);
+  document.getElementById('pfEs').textContent=fmt(esiA);
+  document.getElementById('pfDa').textContent=daily.toFixed(1)+(daily>176?' ✓':' ✗');
+  document.getElementById('pfR').style.display='block';
+}
+fillSelects();initAttn();renderMaster();pickEmp();calcSal();
+</script>
 </body>
 </html>
