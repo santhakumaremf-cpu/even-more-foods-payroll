@@ -1,33 +1,38 @@
 # Even More Foods - Payroll & Attendance System
 
-Web conversion of the Excel payroll workbook (July 2026) for **Even More Foods Private Limited**, Kuruvala, Namagiripet, Rasipuram.
+Web conversion of the Excel payroll workbook (**July 2026**) for **Even More Foods Private Limited**, Kuruvala, Namagiripet, Rasipuram.
+
+**Repo:** https://github.com/santhakumaremf-cpu/even-more-foods-payroll
 
 ## Features
 
 | Feature | Description |
 |---------|-------------|
-| **Formulas & Conditions** | All business rules from Excel (PF ceiling ₹15,000, ESI 0.75%, OT, LOP, Basic/HRA/SPL split) |
-| **Salary Calculator** | Interactive Net Salary calculation with EPF/ESI/OT/Night incentive/Advance/Food |
-| **Attendance Entry** | Day 1–31 hours entry, auto Present/LOP/Paid Days |
-| **Employee Master** | 90 employees from Excel Master sheet (search & filter) |
-| **Payslip Generator** | Generate & print/PDF payslip per employee |
-| **PF / ESI Calculator** | Statutory contribution calculator + EPFO column structure |
-| **Production Roadmap** | 5-phase plan to build full backend system |
+| **Formulas & Conditions** | PF ceiling ₹15,000, ESI 0.75%, OT, LOP, Basic/HRA/SPL |
+| **Salary Calculator** | Interactive Net Salary (EPF/ESI/OT/Night/Advance/Food) |
+| **Attendance Entry** | Day 1–31 hours, auto Present/LOP/Paid Days |
+| **Employee Master** | 90 employees from Excel Master |
+| **Payslip Generator** | Generate & Print / Save as PDF |
+| **PF / ESI Calculator** | Statutory + EPFO report columns |
+| **Production Roadmap** | 5-phase backend plan (FastAPI + PostgreSQL) |
 
 ## How to use
 
-1. Open `payroll-complete.html` in any modern browser (Chrome / Edge / Firefox).
-2. No server required — pure HTML + CSS + JavaScript.
+1. Download **`payroll-complete.html`** from this repo (or from chat artifacts).
+2. Open in **Chrome / Edge / Firefox** — no install, no server.
 
 ## Files
 
-- `payroll-complete.html` — Full system (recommended)
-- `payroll-system.html` — Earlier version (docs + calculator + sample data)
+| File | Description |
+|------|-------------|
+| `payroll-complete.html` | Full app (recommended) |
+| `payroll-system.html` | Lighter version |
+| `employees-data.js` | 90 employees data |
 
-## Source
+## Source Excel
 
-Converted from Excel file: `July'26 (2).xlsm` (50 sheets: Master, daily attendance 1–31, Worker Wages, OT, PF, ESI, Payslip, etc.)
+`July'26 (2).xlsm` — 50 sheets (Master, days 1–31, Worker Wages, OT, PF, ESI, Payslip…)
 
-## Tech
+## License
 
-Single-page HTML app. For production backend: see **Production Plan** tab inside the app (FastAPI + PostgreSQL + React suggested).
+Private company use — Even More Foods Pvt Ltd.
